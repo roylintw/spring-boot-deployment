@@ -8,4 +8,4 @@ WORKDIR /app
 COPY target/spring-boot-deployment-0.0.1-SNAPSHOT.jar .
 
 # 定義容器啟動時運行的命令
-CMD ["java", "-jar", "your-application.jar"] > /dev/stdout
+CMD ["java", "-jar", "spring-boot-deployment-0.0.1-SNAPSHOT.jar"] > /dev/stdout
