@@ -7,7 +7,7 @@ WORKDIR /app
 # 複製整個專案到容器中
 COPY . .
 
-# 使用 Maven 打包應用程序
+# 使用 Maven 重新打包應用程序
 RUN mvn clean package -DskipTests
 
 # 使用 Java 17 版本
