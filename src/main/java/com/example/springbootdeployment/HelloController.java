@@ -9,7 +9,7 @@ public class HelloController {
 
     @GetMapping("/")
     public String landingPage() {
-        return "這是一個 Google Cloud 專案";
+        return "這是一個 Google Cloud 專案!";
     }
 
     @GetMapping("/hello")
