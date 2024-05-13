@@ -14,7 +14,7 @@ RUN mvn clean package -DskipTests
 FROM openjdk:17-oracle
 
 # 將打包後的 Spring Boot 應用程序 JAR 文件複製到 /app 目錄
-COPY target/spring-boot-deployment-0.0.1-SNAPSHOT.jar .
+COPY --from=build /app/target/spring-boot-deployment-0.0.1-SNAPSHOT.jar .
 
 # 定義容器啟動時運行的命令
 CMD ["java", "-jar", "spring-boot-deployment-0.0.1-SNAPSHOT.jar"] > /dev/stdout
