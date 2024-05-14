@@ -1,4 +1,4 @@
-package com.example.springbootdeployment;
+package com.example.springbootdeployment.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

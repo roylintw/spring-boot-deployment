@@ -43,7 +43,7 @@ public class MySecurityConfig {
 
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/hello").hasRole("USER")
-                        .requestMatchers("/").permitAll()
+                        .requestMatchers("/", "/register").permitAll()
                         .anyRequest().denyAll()
                 )
 
