@@ -6,9 +6,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -21,25 +20,40 @@ import java.util.List;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    /**
+     * 使用 InMemory 儲存帳號密碼
+     *
+     * @return InMemoryUserDetailsManager
+     */
+//    @Bean
+//    public InMemoryUserDetailsManager userDetailsManager() {
+//        UserDetails userTest1 = User
+//                .withUsername("teljung1003@gmail.com")
+//                .password("{noop}123")
+//                .roles("ADMIN", "USER")
+//                .build();
+//
+//        UserDetails userTest2 = User
+//                .withUsername("peggy5885251@gmail.com")
+//                .password("{noop}123")
+//                .roles("ADMIN", "USER")
+//                .build();
+//
+//        return new InMemoryUserDetailsManager(userTest1, userTest2);
+//    }
+
+    /**
+     * 密碼的加密機制
+     * @return PasswordEncoder
+     */
     @Bean
-    public InMemoryUserDetailsManager userDetailsManager() {
-        UserDetails userTest1 = User
-                .withUsername("teljung1003@gmail.com")
-                .password("{noop}123")
-                .roles("ADMIN", "USER")
-                .build();
-
-        UserDetails userTest2 = User
-                .withUsername("peggy5885251@gmail.com")
-                .password("{noop}123")
-                .roles("ADMIN", "USER")
-                .build();
-
-        return new InMemoryUserDetailsManager(userTest1, userTest2);
+    public PasswordEncoder passwordEncoder() {
+        return NoOpPasswordEncoder.getInstance();
     }
 
     /**
      * 方法2.解決 CORS 問題
+     *
      * @return CorsConfigurationSource
      */
     @Bean
@@ -59,14 +73,14 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
+//                .exceptionHandling((exception)-> new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
-
                 .authorizeHttpRequests(request -> request
+                                .requestMatchers("/", "/register").permitAll()
                                 .requestMatchers("/hello").authenticated()
 //                        .requestMatchers("/hello").hasRole("USER")
-                                .requestMatchers("/", "/register").permitAll()
                                 .anyRequest().denyAll()
                 )
                 // 方法1.(5-2)
