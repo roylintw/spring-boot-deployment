@@ -17,10 +17,20 @@ public class HelloController {
     }
 
     @GetMapping("/hello")
+//    @PostMapping("/hello")
     public String hello(Authentication authentication) {
-        String userName = authentication.getName();
-        logger.info("使用者 " + userName + " 登入中...");
+        String userName = "";
+        if(authentication != null){
+            userName = authentication.getName();
+            logger.info("使用者 " + userName + " 登入中...");
+        }
+        System.out.println("hello");
         return "您好! " + userName + " 先生/女士";
+    }
+
+    @GetMapping("/helloWorld")
+    public String helloWorld(Authentication authentication) {
+        return "hello world!";
     }
 
 }

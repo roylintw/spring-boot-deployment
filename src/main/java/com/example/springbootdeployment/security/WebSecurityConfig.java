@@ -87,6 +87,7 @@ public class WebSecurityConfig {
                                 .requestMatchers("/memberLogin").authenticated()
                                 // 權限
                                 .requestMatchers("/hello").hasRole("ADMIN")
+                                .requestMatchers("/helloWorld").hasRole("NORMAL_MEMBER")
                                 .anyRequest().denyAll() // deny-by-default
                 )
                 // 方法1.(5-2)

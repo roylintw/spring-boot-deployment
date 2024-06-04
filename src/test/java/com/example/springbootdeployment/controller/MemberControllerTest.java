@@ -48,6 +48,14 @@ public class MemberControllerTest {
 
         mockMvc.perform(loginRequestBuilder)
                 .andExpect(status().is(200));
+
+        // 新帳號可以請求 hello world
+        RequestBuilder helloWorldRequestBuilder = MockMvcRequestBuilders
+                .get("/helloWorld")
+                .with(httpBasic("Roy", "123"));
+
+        mockMvc.perform(helloWorldRequestBuilder)
+                .andExpect(status().is(200));
     }
 
     @Test

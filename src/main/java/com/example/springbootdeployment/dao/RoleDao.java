@@ -14,4 +14,11 @@ public interface RoleDao extends CrudRepository<Role, Integer>  {
             "WHERE member_has_role.member_id = ?1", nativeQuery = true)
     List<Role> getRolesByMemberId(Integer memberId);
 
+    /**
+     * 以角色名稱查詢 Role
+     * @param roleName
+     * @return Role
+     */
+    Role getRoleByRoleName(String roleName);
+
 }

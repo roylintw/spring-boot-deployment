@@ -1,9 +1,13 @@
 package com.example.springbootdeployment.controller;
 
 import com.example.springbootdeployment.dao.MemberDao;
+import com.example.springbootdeployment.dao.MemberHasRoleDao;
+import com.example.springbootdeployment.dao.RoleDao;
 import com.example.springbootdeployment.dto.MemberRequest;
 import com.example.springbootdeployment.service.MemberService;
 import com.example.springbootdeployment.vo.Member;
+import com.example.springbootdeployment.vo.MemberHasRole;
+import com.example.springbootdeployment.vo.Role;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +33,12 @@ public class MemberController {
     private MemberDao memberDao;
 
     @Autowired
+    private RoleDao roleDao;
+
+    @Autowired
+    private MemberHasRoleDao memberHasRoleDao;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
@@ -47,6 +57,16 @@ public class MemberController {
 
         // 新增會員
         Member member = memberService.createMember(memberRequest);
+
+        if(member != null){
+            // 為 Member 添加預設的 Role
+            Role role = roleDao.getRoleByRoleName("ROLE_NORMAL_MEMBER");
+
+            MemberHasRole memberHasRole = new MemberHasRole();
+            memberHasRole.setMemberId(member.getMemberId());
+            memberHasRole.setRoleId(role.getRoleId());
+            memberHasRoleDao.save(memberHasRole);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(member);
     }
 
