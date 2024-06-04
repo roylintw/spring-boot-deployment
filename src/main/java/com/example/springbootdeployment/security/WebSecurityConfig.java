@@ -84,9 +84,10 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(request -> request
                                 // 註冊功能
                                 .requestMatchers("/", "/register").permitAll()
-                                .requestMatchers("/memberLogin", "/hello").authenticated()
-//                        .requestMatchers("/hello").hasRole("USER")
-                                .anyRequest().denyAll()
+                                .requestMatchers("/memberLogin").authenticated()
+                                // 權限
+                                .requestMatchers("/hello").hasRole("ADMIN")
+                                .anyRequest().denyAll() // deny-by-default
                 )
                 // 方法1.(5-2)
                 // 增加CORS設定，解決跨域問題
