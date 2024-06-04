@@ -1,5 +1,6 @@
 package com.example.springbootdeployment.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -20,6 +21,9 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
+
+    @Autowired
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     /**
      * 使用 InMemory 儲存帳號密碼
@@ -82,14 +86,36 @@ public class WebSecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
-                                // 註冊功能
-                                .requestMatchers("/", "/register").permitAll()
-                                .requestMatchers("/memberLogin").authenticated()
-                                // 權限
-                                .requestMatchers("/hello").hasRole("ADMIN")
-                                .requestMatchers("/helloWorld").hasRole("NORMAL_MEMBER")
-                                .anyRequest().denyAll() // deny-by-default
+
+                        // 註冊功能
+                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/memberLogin").authenticated()
+
+                        // 權限
+                        .requestMatchers("/hello").hasRole("ADMIN")
+                        .requestMatchers("/helloWorld").hasRole("NORMAL_MEMBER")
+
+                        // Movie功能
+                        .requestMatchers("/watchVipMovie").hasAnyRole("VIP_MEMBER","ADMIN")
+
+                        // 訂閱和取消訂閱功能
+                        .requestMatchers("/subscribe", "/unsubscribe").hasAnyRole("NORMAL_MEMBER","ADMIN")
+
+                        .anyRequest().denyAll() // deny-by-default
                 )
+                .exceptionHandling(exceptionHandling ->
+                                exceptionHandling
+                                .authenticationEntryPoint(customAuthenticationEntryPoint)
+                )
+//                .formLogin(formLogin ->
+//                        formLogin
+//                                .loginPage("/login")
+//                                .permitAll()
+//                )
+//                .logout(logout ->
+//                        logout
+//                                .permitAll()
+//                )
                 // 方法1.(5-2)
                 // 增加CORS設定，解決跨域問題
 //                .cors(cors -> cors.configurationSource(createCorsConfig()))
