@@ -1,0 +1,1 @@
+INSERT INTO member(account, password, member_name, email) VALUES ('Jack', '$2a$10$mNZNVrKz7/6g.Ix8ZHII2.WYclQkyZIRVgfrXRwkguJ3gdx4hGK.2', '王阿東', 'xxx@gmail.com');

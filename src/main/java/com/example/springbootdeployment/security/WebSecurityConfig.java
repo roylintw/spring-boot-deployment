@@ -6,7 +6,8 @@ import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
@@ -44,11 +45,12 @@ public class WebSecurityConfig {
 
     /**
      * 密碼的加密機制
+     *
      * @return PasswordEncoder
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return NoOpPasswordEncoder.getInstance();
+        return new BCryptPasswordEncoder();
     }
 
     /**
@@ -73,13 +75,16 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         return http
+                // 設定 Session 的創建實例, 使用 http basic 認證時，創造 Session 和 Cookie
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 //                .exceptionHandling((exception)-> new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .csrf(csrf -> csrf.disable())
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
+                                // 註冊功能
                                 .requestMatchers("/", "/register").permitAll()
-                                .requestMatchers("/hello").authenticated()
+                                .requestMatchers("/memberLogin", "/hello").authenticated()
 //                        .requestMatchers("/hello").hasRole("USER")
                                 .anyRequest().denyAll()
                 )

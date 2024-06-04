@@ -10,17 +10,26 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collection;
 
 @RestController
 public class MemberController {
 
     @Autowired
     private MemberService memberService;
+
     @Autowired
     private MemberDao memberDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public static final Logger logger = LoggerFactory.getLogger(MemberController.class);
 
@@ -32,9 +41,25 @@ public class MemberController {
             logger.info("帳號已註冊過");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
+        // hash 密碼
+        String hashedPassword = passwordEncoder.encode(memberRequest.getPassword());
+        memberRequest.setPassword(hashedPassword);
+
         // 新增會員
         Member member = memberService.createMember(memberRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(member);
+    }
+
+    @PostMapping("/memberLogin")
+    public String memberLogin(Authentication authentication){
+        // 取得使用者的帳號
+        String memberName = authentication.getName();
+
+        // 取得使用者的權限
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        return "登入成功!帳號 " + memberName + " 的權限為: " + authorities;
     }
 
 }
