@@ -16,7 +16,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
-public class MemberControllerTest {
+public class CsrfTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -25,12 +25,32 @@ public class MemberControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void register() throws Exception {
+    public void watchFreeMovie_noCsrfToken_fail() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/watchFreeMovie")
+                .with(httpBasic("normal", "normal"));
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().is(403));
+    }
+
+    @Test
+    public void watchFreeMovie_withCsrfToken_success() throws Exception {
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/watchFreeMovie")
+                .with(httpBasic("normal", "normal"))
+                .with(csrf());
+
+        mockMvc.perform(requestBuilder)
+                .andExpect(status().is(200));
+    }
+
+    @Test
+    public void register_noCsrfToken_success() throws Exception {
         Member member = new Member();
-        member.setAccount("Roy");
-        member.setPassword("123");
-        member.setMemberName("林阿憲");
-        member.setGender("man");
+        member.setAccount("csrfTest");
+        member.setPassword("csrfTest");
+        member.setMemberName("csrfTest");
 
         String json = objectMapper.writeValueAsString(member);
 
@@ -41,30 +61,13 @@ public class MemberControllerTest {
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(201));
-
-        // 測試是否能夠使用這個帳號登入
-        RequestBuilder loginRequestBuilder = MockMvcRequestBuilders
-                .post("/memberLogin")
-                .with(httpBasic("Roy", "123"));
-
-        mockMvc.perform(loginRequestBuilder)
-                .andExpect(status().is(200));
-
-        // 新帳號可以請求 hello world
-        RequestBuilder helloWorldRequestBuilder = MockMvcRequestBuilders
-                .get("/helloWorld")
-                .with(httpBasic("Roy", "123"))
-                .with(csrf());
-
-        mockMvc.perform(helloWorldRequestBuilder)
-                .andExpect(status().is(200));
     }
 
     @Test
-    void memberLogin() throws Exception {
+    public void userLogin_noCsrfToken_success() throws Exception {
         RequestBuilder requestBuilder = MockMvcRequestBuilders
                 .post("/memberLogin")
-                .with(httpBasic("Jack", "123"));
+                .with(httpBasic("normal", "normal"));
 
         mockMvc.perform(requestBuilder)
                 .andExpect(status().is(200));
