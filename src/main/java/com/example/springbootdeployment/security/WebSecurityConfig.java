@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -83,6 +84,10 @@ public class WebSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 //                .exceptionHandling((exception)-> new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                 .csrf(csrf -> csrf.disable())
+                // 添加客製化的 Filter
+                .addFilterBefore(new RecordMemberLoginTimeFilter(), BasicAuthenticationFilter.class)
+
+                // 設定 Http Basic 認證和表單認證
                 .httpBasic(Customizer.withDefaults())
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
