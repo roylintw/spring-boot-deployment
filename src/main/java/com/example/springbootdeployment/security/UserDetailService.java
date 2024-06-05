@@ -46,7 +46,6 @@ public class UserDetailService implements UserDetailsService {
 
             // 權限
             List<Role> roleList = roleDao.getRolesByMemberId(member.getMemberId());
-            System.out.println("!!!");
             // 將 Role 轉換成 GrantedAuthority 格式
             List<GrantedAuthority> authorities = convertToAuthorities(roleList);
 
