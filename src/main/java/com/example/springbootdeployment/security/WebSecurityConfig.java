@@ -118,7 +118,7 @@ public class WebSecurityConfig {
      */
     private CorsConfigurationSource createCorsConfig() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(List.of("http://localhost:5173", "http://example.com")); // 請求來源
+        config.setAllowedOrigins(List.of("http://localhost:5173", "http://example.com", "https://vue-deployment1-xpf6zdjama-de.a.run.app")); // 請求來源
         config.setAllowedHeaders(List.of("*")); // request header
         config.setAllowedMethods(List.of("*")); // http method
         config.setAllowCredentials(true); // 是否允許前端帶上 cookie
