@@ -71,6 +71,7 @@ public class MemberController {
 //    @PostMapping("/memberLogin")
     @RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
     public String memberLogin(Authentication authentication){
+        System.out.println("登入中...");
         // 取得使用者的帳號
         String memberName = authentication.getName();
 
