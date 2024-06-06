@@ -12,7 +12,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -67,13 +66,13 @@ public class WebSecurityConfig {
                 // 設定 Session 的創建實例, 使用 http basic 認證時，創造 Session 和 Cookie
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 //                .exceptionHandling((exception)-> new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-//                .csrf(csrf -> csrf.disable())
-                .csrf(csrf -> csrf
-                        // Cookie 裡面回傳 XSRF-TOKEN 給前端
-                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                        .csrfTokenRequestHandler(createCsrfHandler())
-                        // 關閉 CSRF 防禦
-                        .ignoringRequestMatchers("/register", "/memberLogin"))
+                .csrf(csrf -> csrf.disable()) // 關閉 CSRF 防禦
+//                .csrf(csrf -> csrf
+//                        // Cookie 裡面回傳 XSRF-TOKEN 給前端
+//                        .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+//                        .csrfTokenRequestHandler(createCsrfHandler())
+//                        // 關閉 CSRF 防禦
+//                        .ignoringRequestMatchers("/register", "/memberLogin"))
                 // 添加客製化的 Filter
                 .addFilterBefore(new RecordMemberLoginTimeFilter(), BasicAuthenticationFilter.class)
 
@@ -103,7 +102,7 @@ public class WebSecurityConfig {
                         exceptionHandling
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
-                .cors(Customizer.withDefaults()) // 關閉 CORS
+                .cors(Customizer.withDefaults()) // 關閉 CORS 防禦
                 // 方法1.(5-2)
                 // 增加CORS設定，解決跨域問題
 //                .cors(cors -> cors.configurationSource(createCorsConfig()))
