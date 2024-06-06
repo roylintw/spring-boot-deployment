@@ -27,6 +27,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodNotAllowedException.class)
     public final ResponseEntity<Object> handleMethodNotAllowedException(MethodNotAllowedException ex, WebRequest request) {
         String errorMessage = "Method Not Allowed: " + ex.getMessage();
+        log.info("Request: ", request);
         log.error("Method Not Allowed Exception: ", ex);
         return new ResponseEntity<>(errorMessage, HttpStatus.METHOD_NOT_ALLOWED);
     }
