@@ -103,9 +103,10 @@ public class WebSecurityConfig {
                         exceptionHandling
                                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 )
+                .cors(Customizer.withDefaults()) // 關閉 CORS
                 // 方法1.(5-2)
                 // 增加CORS設定，解決跨域問題
-                .cors(cors -> cors.configurationSource(createCorsConfig()))
+//                .cors(cors -> cors.configurationSource(createCorsConfig()))
                 // 方法2.關閉Spring Security的授權檢查機制
 //                .cors(Customizer.withDefaults()) // disable this line to reproduce the CORS 401
                 .build();
