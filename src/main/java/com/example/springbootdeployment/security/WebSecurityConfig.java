@@ -81,21 +81,20 @@ public class WebSecurityConfig {
                 .formLogin(Customizer.withDefaults())
                 .authorizeHttpRequests(request -> request
 
-                                .requestMatchers("*").permitAll()
-//                        // 註冊功能
-//                        .requestMatchers("/", "/register").permitAll()
-//                        .requestMatchers("/memberLogin").authenticated()
-//
-//                        // 權限
-//                        .requestMatchers("/hello").hasRole("ADMIN")
-//                        .requestMatchers("/helloWorld").hasRole("NORMAL_MEMBER")
-//
-//                        // Movie功能
-//                        .requestMatchers("/watchFreeMovie").hasAnyRole("NORMAL_MEMBER")
-//                        .requestMatchers("/watchVipMovie").hasAnyRole("VIP_MEMBER", "ADMIN")
-//
-//                        // 訂閱和取消訂閱功能
-//                        .requestMatchers("/subscribe", "/unsubscribe").hasAnyRole("NORMAL_MEMBER", "ADMIN")
+                        // 註冊功能
+                        .requestMatchers("/", "/register").permitAll()
+                        .requestMatchers("/memberLogin").authenticated()
+
+                        // 權限
+                        .requestMatchers("/hello").hasRole("ADMIN")
+                        .requestMatchers("/helloWorld").hasRole("NORMAL_MEMBER")
+
+                        // Movie功能
+                        .requestMatchers("/watchFreeMovie").hasAnyRole("NORMAL_MEMBER")
+                        .requestMatchers("/watchVipMovie").hasAnyRole("VIP_MEMBER", "ADMIN")
+
+                        // 訂閱和取消訂閱功能
+                        .requestMatchers("/subscribe", "/unsubscribe").hasAnyRole("NORMAL_MEMBER", "ADMIN")
 
                         .anyRequest().denyAll() // deny-by-default
                 )
