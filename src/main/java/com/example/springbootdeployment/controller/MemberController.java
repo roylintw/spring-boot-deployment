@@ -17,9 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
@@ -70,7 +68,8 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(member);
     }
 
-    @PostMapping("/memberLogin")
+//    @PostMapping("/memberLogin")
+    @RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
     public String memberLogin(Authentication authentication){
         // 取得使用者的帳號
         String memberName = authentication.getName();
