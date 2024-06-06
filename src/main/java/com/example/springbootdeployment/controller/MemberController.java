@@ -68,8 +68,8 @@ public class MemberController {
         return ResponseEntity.status(HttpStatus.CREATED).body(member);
     }
 
-//    @PostMapping("/memberLogin")
-    @RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
+    @PostMapping("/memberLogin")
+//    @RequestMapping(value = "/memberLogin", method = RequestMethod.POST)
     public String memberLogin(Authentication authentication){
         System.out.println("登入中...");
         // 取得使用者的帳號
